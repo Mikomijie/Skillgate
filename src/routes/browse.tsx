@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -22,6 +22,9 @@ export const Route = createFileRoute("/browse")({
 });
 
 function BrowsePage() {
+  const matches = useMatches();
+  const isChildRoute = matches.some((m) => m.routeId === "/browse/$id");
+
   const { category, q } = Route.useSearch();
   const navigate = Route.useNavigate();
   const fetchArtisans = useServerFn(listArtisans);
@@ -52,6 +55,11 @@ function BrowsePage() {
     } finally {
       setAiLoading(false);
     }
+  }
+
+  // If a child route (e.g. /browse/$id) is active, render only that
+  if (isChildRoute) {
+    return <Outlet />;
   }
 
   const activeCat = cats.data?.find((c) => c.slug === category);
