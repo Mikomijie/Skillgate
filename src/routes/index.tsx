@@ -9,14 +9,13 @@ import { Shield, Zap, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SkillGate — Skilled Hands, Verified Trust" },
+      { title: "SkillGate" },
       { name: "description", content: "Connect with Redemption City's most reliable artisans. Verified, AI-matched, ready to work." },
     ],
   }),
   component: HomePage,
 });
 
-// Real images for the first 4 featured artisans. Replace as real signups arrive.
 const FEATURED_IMAGES = [
   "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=400&fit=crop",
   "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
@@ -24,16 +23,13 @@ const FEATURED_IMAGES = [
   "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=400&h=400&fit=crop",
 ];
 
-// Category cover images instead of icons
+// Fixed: unique image per category slug (matches your seeded categories)
 const CATEGORY_IMAGES: Record<string, string> = {
-  electrician: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&h=400&fit=crop",
-  plumber: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&h=400&fit=crop",
-  carpenter: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&h=400&fit=crop",
-  tailor: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&h=400&fit=crop",
-  mechanic: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&h=400&fit=crop",
-  cleaner: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop",
-  painter: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&h=400&fit=crop",
-  hairstylist: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=400&fit=crop",
+  plumbing: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&h=400&fit=crop",
+  electrical: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&h=400&fit=crop",
+  carpentry: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&h=400&fit=crop",
+  painting: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&h=400&fit=crop",
+  masonry: "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=600&h=400&fit=crop",
 };
 
 function HomePage() {
@@ -44,43 +40,72 @@ function HomePage() {
 
   const featuredList = (featured.data ?? []).slice(0, 4).map((a: any, i: number) => ({
     ...a,
-    avatar_url: FEATURED_IMAGES[i] ?? a.avatar_url,
+    avatar_url: a.avatar_url ?? FEATURED_IMAGES[i],
   }));
 
   return (
     <AppShell>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0F172A] text-white">
-        <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_20%_20%,#1e3a8a,transparent_55%)]" />
+      {/* Hero — now light background to match Stitch design */}
+      <section className="relative overflow-hidden bg-[#F8FAFC]">
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_20%_20%,#FDE68A,transparent_55%)]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-24">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-3 py-1 text-xs font-semibold text-white">
-              <Sparkles className="h-3 w-3" /> AI-powered matching · Verified artisans
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#0F172A]/5 px-3 py-1 text-xs font-semibold text-[#0F172A]">
+                <Sparkles className="h-3 w-3" /> AI-powered matching · Verified artisans
+              </div>
+              <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-[#0F172A]">
+                Skilled hands. <span className="text-slate-400">Verified trust.</span>
+              </h1>
+              <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-xl">
+                SkillGate connects Redemption City with background-checked, community-vetted artisans — electricians, plumbers, carpenters, painters, and more.
+              </p>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link
+                  to="/browse"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-6 py-3 font-bold text-white hover:bg-[#1e293b]"
+                >
+                  Find an artisan <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/register-artisan"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 font-bold text-[#0F172A] hover:bg-slate-50"
+                >
+                  Become an artisan
+                </Link>
+              </div>
+              <div className="mt-8 flex flex-wrap gap-6 text-sm text-slate-600">
+                <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[#F59E0B]" /> 40+ verified pros</div>
+                <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[#F59E0B]" /> Background-checked</div>
+                <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[#F59E0B]" /> AI-matched</div>
+              </div>
             </div>
-            <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-black tracking-tight">
-              Skilled hands. <span className="text-white/70">Verified trust.</span>
-            </h1>
-            <p className="mt-4 text-base sm:text-lg text-slate-300 max-w-2xl">
-              SkillGate connects Redemption City with background-checked, community-vetted artisans — electricians, plumbers, tailors, mechanics, and more.
-            </p>
-            <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              <Link
-                to="/browse"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 font-bold text-[#0F172A] hover:bg-slate-100"
-              >
-                Find an artisan <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/register-artisan"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-bold hover:bg-white/10"
-              >
-                Become an artisan
-              </Link>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-6 text-sm text-slate-300">
-              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> 40+ verified pros</div>
-              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Background-checked</div>
-              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> AI-matched</div>
+
+            {/* Floating preview card */}
+            <div className="hidden lg:block">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg max-w-sm ml-auto">
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=100&h=100&fit=crop"
+                    alt="Artisan"
+                    className="h-14 w-14 rounded-xl object-cover"
+                  />
+                  <div>
+                    <div className="font-bold text-[#0F172A]">Emeka Okafor</div>
+                    <div className="text-xs text-slate-500">Master Plumber</div>
+                  </div>
+                  <span className="ml-auto text-[10px] font-bold uppercase bg-[#F59E0B]/15 text-[#B45309] px-2 py-1 rounded-full">
+                    Verified
+                  </span>
+                </div>
+                <div className="mt-3 text-sm text-amber-500">★★★★★ <span className="text-slate-500">(142 reviews)</span></div>
+                <Link
+                  to="/browse"
+                  className="mt-4 block text-center rounded-xl bg-[#0F172A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#1e293b]"
+                >
+                  Book Now
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -126,7 +151,7 @@ function HomePage() {
               { i: <Zap className="h-5 w-5" />, t: "Book in seconds", d: "Choose your time, share the job, and the artisan gets notified instantly." },
             ].map((s, i) => (
               <div key={i} className="rounded-2xl bg-white border border-slate-200 p-5">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#0F172A] text-white">{s.i}</div>
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#F59E0B] text-white">{s.i}</div>
                 <div className="mt-3 text-xs font-bold text-slate-500">STEP {i + 1}</div>
                 <div className="text-lg font-black text-[#0F172A]">{s.t}</div>
                 <p className="mt-1 text-sm text-slate-600">{s.d}</p>
